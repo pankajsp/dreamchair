@@ -15,6 +15,7 @@ exports.createWalletTransaction = async (req, res) => {
         key_secret: process.env.ROGERPAY_SECRET_KEY,
       });
 
+      
       const receipt = `receipt_${shortid.generate()}`;
 
       try {
