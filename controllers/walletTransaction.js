@@ -15,7 +15,6 @@ exports.createWalletTransaction = async (req, res) => {
         key_secret: process.env.ROGERPAY_SECRET_KEY,
       });
 
-      
       const receipt = `receipt_${shortid.generate()}`;
 
       try {
@@ -41,16 +40,16 @@ exports.createWalletTransaction = async (req, res) => {
         await walletTransaction.save();
         res.json(walletTransaction);
       } catch (error) {
-        res.status(500).json({ error: error.message });
+        res.status(500).json({ error: error });
       }
     } catch (error) {
-      res.status(500).json({ message: error.message });
+      res.status(500).json({ message: error });
     }
   } catch (error) {
     res.status(500).json({
       success: false,
       message: "Failed to create wallet transaction",
-      error: error.message,
+      error: error,
     });
   }
 };
