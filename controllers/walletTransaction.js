@@ -40,9 +40,11 @@ exports.createWalletTransaction = async (req, res) => {
         await walletTransaction.save();
         res.json(walletTransaction);
       } catch (error) {
+        console.log('error at 43', error);
         res.status(500).json({ error: error });
       }
     } catch (error) {
+      console.log('error at 48', error);
       res.status(500).json({ message: error });
     }
   } catch (error) {
