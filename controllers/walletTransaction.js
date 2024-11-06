@@ -89,10 +89,39 @@ exports.successWalletTransaction = async (req, res) => {
       await receivedAmount.save();
     }
 
-    if (!wallet) {
-      wallet = new Wallet({ userId, amount: Number(payment.amount) });
-    } else {
-      wallet.amount += payment.amount;
+    if (
+      payment.contestId === null &&
+      payment.cabinetContestId === null &&
+      payment.exitPollContestId === null
+    ) {
+      if (payment.amount >= 1000) {
+        let finalAmount = payment.amount * 2;
+        if (!wallet) {
+          wallet = new Wallet({ userId, amount: Number(finalAmount) });
+        } else {
+          wallet.amount += finalAmount;
+        }
+      } else {
+        if (!wallet) {
+          wallet = new Wallet({ userId, amount: Number(payment.amount) });
+        } else {
+          wallet.amount += payment.amount;
+        }
+      }
+    }
+
+    if (
+      payment.contestId !== null ||
+      payment.cabinetContestId !== null ||
+      payment.exitPollContestId !== null
+    ) {
+      if (payment.amount >= 1000) {
+        if (!wallet) {
+          wallet = new Wallet({ userId, amount: Number(payment.amount) });
+        } else {
+          wallet.amount += payment.amount;
+        }
+      }
     }
 
     await wallet.save();
@@ -103,6 +132,7 @@ exports.successWalletTransaction = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
 
 exports.getWalletTransactionById = async (req, res) => {
   const { id } = req.params;
