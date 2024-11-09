@@ -126,6 +126,7 @@ exports.loginRegister = async (req, res) => {
           success: true,
           message: "otp sent successfully",
         });
+        return;
     }
 
     const otp = Math.floor(100000 + Math.random() * 900000);
