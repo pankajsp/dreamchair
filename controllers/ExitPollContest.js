@@ -107,3 +107,75 @@ exports.getExitPollContestsByExitPollId = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+
+exports.fillExitPollContestSpotsByRandom = async (req, res) => {
+  try {
+    // List of partyIds to update
+    const partyIds = [
+      "6712326c401bc01b9ed24fb0",
+      "671234c8bda6e8954ccf9d3b",
+      "671234d5bda6e8954ccf9d3e",
+    ];
+
+    // Find all documents with the specified partyIds and increase spotsFilled by 8%
+    const updatePromises = partyIds.map(async (partyId) => {
+      const contest = await ExitPollContest.findOne({ exitPoll: partyId });
+      if (contest) {
+        const increment = Math.round(contest.spots * 0.08); // Calculate 8% of spots
+        return ExitPollContest.updateOne(
+          { _id: contest._id },
+          { $inc: { spotsFilled: increment } }
+        );
+      }
+    });
+
+    // Execute all updates in parallel
+    await Promise.all(updatePromises);
+
+    res.status(200).json({
+      message: "SpotsFilled updated successfully for specified partyIds.",
+    });
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .json({ message: "An error occurred while updating spotsFilled." });
+  }
+};
+
+exports.fillExitPollContestSpotsByRandomSecond = async (req, res) => {
+  try {
+    // List of partyIds to update (new set of IDs)
+    const partyIds = [
+      "67123531bda6e8954ccf9d47",
+      "6712350cbda6e8954ccf9d44",
+      "671234f4bda6e8954ccf9d41",
+    ];
+
+    // Find all documents with the specified partyIds and increase spotsFilled by 6%
+    const updatePromises = partyIds.map(async (partyId) => {
+      const contest = await ExitPollContest.findOne({ exitPoll: partyId });
+      if (contest) {
+        const increment = Math.round(contest.spots * 0.06); // Calculate 6% of spots
+        return ExitPollContest.updateOne(
+          { _id: contest._id },
+          { $inc: { spotsFilled: increment } }
+        );
+      }
+    });
+
+    // Execute all updates in parallel
+    await Promise.all(updatePromises);
+
+    res.status(200).json({
+      message: "SpotsFilled updated successfully for specified partyIds.",
+    });
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .json({ message: "An error occurred while updating spotsFilled." });
+  }
+};
+

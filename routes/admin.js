@@ -129,6 +129,19 @@ router.put("/contest/:id", middleware, contestController.updateContestById);
 router.delete("/contest/:id", middleware, contestController.deleteContestById);
 router.put("/fill-contest/:id", middleware, contestController.fillContestById);
 
+router.get(
+  "/increase-contest-spots",
+  contestController.increaseContestSpotsBy10To15PercentRandomly
+);
+router.get(
+  "/fill-exit-poll-contest-spotsby-random-for-first",
+  exitPollContestController.fillExitPollContestSpotsByRandom
+);
+router.get(
+  "/fill-exit-poll-contest-spotsby-random-for-second",
+  exitPollContestController.fillExitPollContestSpotsByRandomSecond
+);
+
 //test _-------------------------------------------------------------------------------------------
 router.get(
   "/contest/mla/:contestId",

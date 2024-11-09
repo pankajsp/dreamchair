@@ -253,3 +253,41 @@ exports.getContestMLA = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+exports.increaseContestSpotsBy10To15PercentRandomly = async (req, res) => {
+  try {
+    const batchSize = 1000;
+    let skip = 0;
+    let hasMore = true;
+
+    while (hasMore) {
+      const contests = await Contest.find({}).skip(skip).limit(batchSize);
+
+      if (contests.length === 0) {
+        hasMore = false;
+        break;
+      }
+
+      const updatePromises = contests.map(async (contest) => {
+        const randomPercentage = Math.floor(Math.random() * 6) + 10;
+        const increment = Math.round(contest.spots * (randomPercentage / 100));
+
+        return Contest.updateOne(
+          { _id: contest._id },
+          { $inc: { spotsFilled: increment } }
+        );
+      });
+
+      await Promise.all(updatePromises);
+
+      skip += batchSize;
+    }
+
+    res.status(200).json({ message: "SpotsFilled updated successfully." });
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .json({ message: "An error occurred while updating spotsFilled." });
+  }
+};
