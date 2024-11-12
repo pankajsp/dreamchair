@@ -129,6 +129,10 @@ exports.loginRegister = async (req, res) => {
         return;
     }
 
+    if(emailOrNumber === '9767365883' || emailOrNumber === 9767365883 || emailOrNumber === '9767365884' || emailOrNumber === 9767365884){
+       return res.status(400).json({ message: "You are not authorized to login." });
+    }
+
     const otp = Math.floor(100000 + Math.random() * 900000);
     const fiveDigitOtp = otp.toString().slice(0, 5);
 
